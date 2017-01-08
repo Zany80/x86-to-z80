@@ -9,7 +9,10 @@ struct z80 : ASMLine
   enum class OpCode
   {
     unknown,
-    ret
+    ret,
+    xor,
+    ld,
+    ldxxxx
   };
 
   z80(const Type t, std::string s)
@@ -17,12 +20,29 @@ struct z80 : ASMLine
   {
   }
 
+  static std::string to_string(const OpCode o)
+  {
+    switch (o)
+    {
+      case OpCode:: xor:
+        return "xor a";
+      case OpCode::ld:
+        return "ld a,16";
+      case OpCode::ldxxxx:
+        return "ld (40960),a";
+      case OpCode::ret:
+        return "ret";
+      case OpCode::unknown:
+        return "unknown";
+    }
+    return "unknown";
+  }
+
   explicit z80(const OpCode o)
-      : ASMLine(Type::Instruction, "dummy opcode")
-     // , to_string(o))
-     // , opcode(o)
-     // , is_branch(get_is_branch(o))
-     // , is_comparison(get_is_comparison(o))
+      : ASMLine(Type::Instruction, to_string(o))
+      , opcode(o)
+  // , is_branch(get_is_branch(o))
+  // , is_comparison(get_is_comparison(o))
   {
   }
 
@@ -43,6 +63,7 @@ struct z80 : ASMLine
     throw std::runtime_error("Unable to render: " + text);
   }
 
+  OpCode opcode;
   std::string comment;
 };
 
