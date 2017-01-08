@@ -25,7 +25,6 @@ int main()
 
   auto useFreeLambda = [&]() {
     z80.memory(0xa000) = 0x10;
-    z80.writeStdOut("dit is een test");
   };
 
   useFreeLambda();
