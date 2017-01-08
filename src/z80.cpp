@@ -6,13 +6,13 @@ void translate_instruction(std::vector<z80>& instructions, const i386::OpCode op
 {
   switch (op)
   {
-  case i386::OpCode::xorl:
-	  instructions.emplace_back(z80::OpCode::xor);
-	  break;
-  case i386::OpCode::movb:
-	  instructions.emplace_back(z80::OpCode::ld);
-	  instructions.emplace_back(z80::OpCode::ldxxxx);
-	  break;
+    case i386::OpCode::xorl:
+      instructions.emplace_back(z80::OpCode:: xor);
+      break;
+    case i386::OpCode::movb:
+      instructions.emplace_back(z80::OpCode::ld);
+      instructions.emplace_back(z80::OpCode::ldxxxx);
+      break;
 
     case i386::OpCode::ret:
     case i386::OpCode::retl:
