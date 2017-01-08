@@ -143,6 +143,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="z80.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="i386.h" />
+    <ClInclude Include="types.h" />
+    <ClInclude Include="z80.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
