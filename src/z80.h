@@ -12,7 +12,8 @@ struct z80 : ASMLine
     ret,
     xor,
     ld,
-    ldxxxx
+    ldxxxx,
+    call
   };
 
   z80(const Type t, std::string s)
@@ -30,6 +31,8 @@ struct z80 : ASMLine
         return "ld a,16";
       case OpCode::ldxxxx:
         return "ld (40960),a";
+      case OpCode::call:
+        return "call";
       case OpCode::ret:
         return "ret";
       case OpCode::unknown:

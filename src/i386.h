@@ -40,7 +40,8 @@ struct i386 : ASMLine
     sbbb,
     negb,
     notb,
-    retl
+    retl,
+    calll
   };
 
   static OpCode parse_opcode(Type t, const std::string& o)
@@ -121,6 +122,8 @@ struct i386 : ASMLine
           return OpCode::pushl;
         if (o == "retl")
           return OpCode::retl;
+        if (o == "calll")
+          return OpCode::calll;
       }
     }
     throw std::runtime_error("Unknown opcode: " + o);

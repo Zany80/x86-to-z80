@@ -13,7 +13,9 @@ void translate_instruction(std::vector<z80>& instructions, const i386::OpCode op
       instructions.emplace_back(z80::OpCode::ld);
       instructions.emplace_back(z80::OpCode::ldxxxx);
       break;
-
+    case i386::OpCode::calll:
+      instructions.emplace_back(z80::OpCode::call);
+      break;
     case i386::OpCode::ret:
     case i386::OpCode::retl:
       instructions.emplace_back(z80::OpCode::ret);
