@@ -1,7 +1,7 @@
 # About
 
 Attempts to translate x86 assembly into z80 assembly. The idea is to make C++ available to Z80 based computers like the MSX.
-The process works by using the clang (LLVM 3.9.1) compiler to convert C++ to x86 assembly, and then re-assembling this output into z80-opcodes.
+The process works by using the clang (LLVM 3.9.1) compiler to convert C++ to x86 assembly, and then re-assembling this output into z80-assembly by a pretty static 1:N translation
 
 # References
 
