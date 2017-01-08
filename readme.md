@@ -10,5 +10,36 @@ I think this can have very cool application in modern, small, low-cost, embedded
 
 # Example
 
--- todo, once I got something, I'll add it 
+```c++
+struct Z80
+{
+  volatile uint8_t& memory(const uint16_t address)
+  {
+    return *reinterpret_cast<uint8_t*>(address);
+  }
+};
+
+int main()
+{
+  Z80 z80;
+
+  auto useFreeLambda = [&]() {
+    z80.memory(0xa000) = 0x10;
+    z80.writeStdOut("dit is een test");
+  };
+
+  useFreeLambda();
+  return 0;
+}
+```
+
+Is re-assembled as:
+```assembly
+        ld a,16       ; movb    $16, 40960
+        ld (40960),a  ; movb    $16, 40960
+        xor a         ; xorl    %eax, %eax
+        ret           ; retl
+```        
+
+
 
