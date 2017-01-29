@@ -14,6 +14,7 @@ https://twitter.com/janwilmans
 - http://www.nowind.nl
 - using Visual Studio 2017 RC1 with clang-support
 - https://www.visualstudio.com/vs/visual-studio-2017-rc/
+- http://www.myquest.nl/z80undocumented/z80-documented-v0.91.pdf
 
 # Why?
 
@@ -77,14 +78,43 @@ I'm currently exploring different options. Some thoughts:
 
 My conclusion so far: the i386 to z80 path seems viable and both assembly languages are somewhat familiar to me, so instead of learning how to code backends or learning a new assembly language first, I will continue on this path for now.
 
-# i386 state 
+# Maintaining the i386 state on the z80
 
-The i386 consists:
+The i386 consists of:
 
-https://www.google.nl/url?sa=i&rct=j&q=&esrc=s&source=imgres&cd=&cad=rja&uact=8&ved=0ahUKEwia7pnEmObRAhVLVRoKHYM_B0sQjRwIBw&url=http%3A%2F%2Fwww.slideshare.net%2FAMuqeetkhan%2Flec-03-ia32-architecture&psig=AFQjCNHctz5KLupR9oRJGI_5FBIKLHGA3Q&ust=1485739167560240
+Registers: EAX, EBX, ECX, EDX, ESI, EDI, EBP and ESP  (8x4=32 bytes)
+Segment registers: CS, SS, DS, ES, FS, GS (6x2=12 bytes) 
+More registers: EFLAGS 32bits (Zero, Carry, Overflow, etc.) and EIP (instruction pointer)
 
+A x86 instruction can change any of these registers (that I will refer to collectively as 'the i386 state').
 
-EAX, EBX, ECX, EDX, ESI, EDI, EBP and ESP 
+The i386 state will have to be maintained/available on, the z80 target. This is because a subsequent instruction's exection/result can be dependend on this state.
+
+Since the z80 has only:
+
+Registers: AF, BC, DE, HL, IX, IY
+More register: SP (stack pointer), IP (instruction pointer) 
+
+Memory (48 bytes) will have to be used to store this state.
+This memory can be allocated from the stack, but perhaps static allocation at the start of the 0x100 area can offer better optimization opportunities.
+
+When using the stack the most strait-forward way to update values would be:
+
+LD A,5         ; 2-byte operation, 7 T-states
+LD (IX+n), A   ; IX and IY allow indexing, where n is the offset in bytes of the register relative to IX pointing to the memory, 20 T-states
+
+A total of 6 bytes and 27 T-states.
+
+The downside of this is that LD (IX+n),R is a relatively slow operation.
+
+Alternatively:
+
+LD A,5       ; same 2 bytes, 7 T-states  
+LD (nn), A   ; 3 bytes, where nn is an absolute memory address, a 13 T-state operation
+
+A total of 5 bytes and 20 T-states.
+
+This saves 1 byte and 6 T-states on every register load/save, and moreover, it does only changes the A-register.
 
 # Z80 Process Setup / Memory Layout
 
