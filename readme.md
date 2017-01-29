@@ -1,7 +1,9 @@
 # About
 
-Attempts to translate x86 assembly into z80 assembly. The idea is to make C++ available to Z80 based computers like the MSX.
-The process works by using the clang (LLVM 3.9.1) compiler to convert C++ to x86 assembly, and then re-assembling this output into z80-assembly by a pretty static 1:N translation
+Attempt to translate x86 assembly into z80 assembly. The idea is to make C++ available to Z80 based computers like the MSX.
+The process works by using the clang (LLVM 3.9.1) compiler to convert C++ to x86 assembly and then re-assembling this output into z80-assembly by a pretty static 1:N translation
+
+The project is forked from lefticus/x86-to-6502 and I intend to keep to support for the 6502, so even though I named the project x86-to-z80, it could be x86-to-MultipleCPUs later (or preferably a better name).
 
 Discuss or follow on twitter, if you like:
 https://twitter.com/janwilmans
@@ -74,6 +76,15 @@ I'm currently exploring different options. Some thoughts:
 - I'm currently reading up on how a LLVM backend is constructed at http://jonathan2251.github.io/lbd/llvmstructure.html
 
 My conclusion so far: the i386 to z80 path seems viable and both assembly languages are somewhat familiar to me, so instead of learning how to code backends or learning a new assembly language first, I will continue on this path for now.
+
+# i386 state 
+
+The i386 consists:
+
+https://www.google.nl/url?sa=i&rct=j&q=&esrc=s&source=imgres&cd=&cad=rja&uact=8&ved=0ahUKEwia7pnEmObRAhVLVRoKHYM_B0sQjRwIBw&url=http%3A%2F%2Fwww.slideshare.net%2FAMuqeetkhan%2Flec-03-ia32-architecture&psig=AFQjCNHctz5KLupR9oRJGI_5FBIKLHGA3Q&ust=1485739167560240
+
+
+EAX, EBX, ECX, EDX, ESI, EDI, EBP and ESP 
 
 # Z80 Process Setup / Memory Layout
 
