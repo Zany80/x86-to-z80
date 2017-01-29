@@ -166,19 +166,5 @@ Second option is also awkward, but somewhat cleaner (maybe):
 
 Basically what I'm doing here is hardcoding against my own re-assembler, using the knowlegde of how CL will map to 'C' and DX will map to 'DE'. This is writing z80 code in i386 syntax :)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+The second method has the advantage of giving the compiler knowlegde about what registers are affected, so might offer better optimization opportunities.
 
