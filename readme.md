@@ -137,3 +137,48 @@ The .com file is always completely loaded starting at address 0x100.
 
 So this is the environment to link to....
 
+# Awkward
+
+Binding c++ methods to Bios functions is bit awkward, the problem:
+
+The method needs to call a fixed memory address like so:
+
+'''
+LD   DE, "some text"
+LD   C,9    ; command '9' is 'output string to console' / sortof like std::cout 
+CALL 0x5    ; call BDOS (a fixed hook address to invoke a bios-function)
+'''
+
+One option is to create the method in assembly and link to it, hard-coding it against the x86 ABI (https://en.wikipedia.org/wiki/X86_calling_conventions).
+
+Second option is also awkward, but somewhat cleaner (maybe):
+
+'''
+  void writeStdOut(const char* text)
+  {
+    register const char* textAddres asm("dx") = text; // force it into 'dx'
+    asm("                                  \
+      movb 0x9, %%cl; # Console output  \n \
+      calll 0x5; # bdos                 \n \
+      " :: "r"(textAddres) : "%eax");
+  }
+'''
+
+Basically what I'm doing here is hardcoding against my own re-assembler, using the knowlegde of how CL will map to 'C' and DX will map to 'DE'. This is writing z80 code in i386 syntax :)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
