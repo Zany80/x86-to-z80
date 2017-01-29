@@ -82,36 +82,37 @@ My conclusion so far: the i386 to z80 path seems viable and both assembly langua
 
 The i386 consists of:
 
+```
 Registers: EAX, EBX, ECX, EDX, ESI, EDI, EBP and ESP  (8x4=32 bytes)
 Segment registers: CS, SS, DS, ES, FS, GS (6x2=12 bytes) 
 More registers: EFLAGS 32bits (Zero, Carry, Overflow, etc.) and EIP (instruction pointer)
-
+```
 A x86 instruction can change any of these registers (that I will refer to collectively as 'the i386 state').
 
 The i386 state will have to be maintained/available on, the z80 target. This is because a subsequent instruction's exection/result can be dependend on this state.
 
 Since the z80 has only:
-
+```
 Registers: AF, BC, DE, HL, IX, IY
 More register: SP (stack pointer), IP (instruction pointer) 
-
+```
 Memory (48 bytes) will have to be used to store this state.
 This memory can be allocated from the stack, but perhaps static allocation at the start of the 0x100 area can offer better optimization opportunities.
 
 When using the stack the most strait-forward way to update values would be:
-
+```
 LD A,5         ; 2-byte operation, 7 T-states
 LD (IX+n), A   ; IX and IY allow indexing, where n is the offset in bytes of the register relative to IX pointing to the memory, 20 T-states
-
+```
 A total of 6 bytes and 27 T-states.
 
 The downside of this is that LD (IX+n),R is a relatively slow operation.
 
 Alternatively:
-
+```
 LD A,5       ; same 2 bytes, 7 T-states  
 LD (nn), A   ; 3 bytes, where nn is an absolute memory address, a 13 T-state operation
-
+```
 A total of 5 bytes and 20 T-states.
 
 This saves 1 byte and 6 T-states on every register load/save, and moreover, it does only changes the A-register.
@@ -122,12 +123,12 @@ The z80 can run MSXDOS 2.xx (developed by Microsoft and Spectravideo) which is a
 (MSX actually stands for MicroSoft eXtened, or at least, I like to think so :)
 
 MSXDOS uses a fixed memory layout that looks like this (roughly):
-
+```
 0-0xFF = reserved area (zero page) for MSXDOS (https://en.wikipedia.org/wiki/MSX-DOS)
 0x100-0xdffff (~56Kb) = available for program
 0xe000-0xefff = area for stack growing down, not actually a defined area, but I keep out of this area to allow for a 4kB stack for now.
 0xf000-0xffff = reserved area for MSX BIOS and MSX BASIC (settings, screen modes, shadow memory for VDP etc.)
-
+```
 A program is linked as a .COM file that is exactly like a MS-DOS .com file in that it has no header, no relocation information just code+data, all in one segment, limited to, theoretically, 65KB-256 bytes. However, since we need to repect the 'other stuff' mentioned above, the filesize limit is somewhat smaller even.
 
 Does this mean a program can only be 56kb? Initially: yes, but once started, more data/code can be loaded from other files. Generally 128kB memory is available at least (switchable in 16kB segments called 'banks') and the test-machine on my desk has 4Mb RAM available (256 banks of 16kB).
@@ -135,17 +136,4 @@ Does this mean a program can only be 56kb? Initially: yes, but once started, mor
 The .com file is always completely loaded starting at address 0x100.
 
 So this is the environment to link to....
-
-
-
-
-
-
-
-
-
-
-
-
-
 
