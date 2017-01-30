@@ -72,7 +72,7 @@ Is re-assembled as:
 
 I'm currently exploring different options. Some thoughts:
 
-- is i386 to z80 assembly an relatively easy conversion? or is, let's say a MIPS to z80 conversion easier (suggested since MIPS CPUs have fewer registers, _appearently_ no flag-registers with sounds like a plus for translation). However, that could also mean that the code would get optimized for memory-access operations instead of using registers. 
+- is i386 to z80 assembly an relatively easy conversion? or is, let's say a MIPS to z80 conversion easier (suggested since MIPS CPUs have fewer registers and _appearently_ no flag-registers which sounds like a plus for translation). However, that could also mean that the code would get optimized for memory-access operations instead of using registers. 
 - Going further along those lines, would it not be better to just have an LLVM backend for the z80 ? That way the code gets optimized of the amount of registers that the z80 actually HAS :)
 - I'm currently reading up on how a LLVM backend is constructed at http://jonathan2251.github.io/lbd/llvmstructure.html
 
@@ -96,7 +96,7 @@ Since the z80 has only:
 Registers: AF, BC, DE, HL, IX, IY
 More register: SP (stack pointer), IP (instruction pointer) 
 ```
-Memory (48 bytes) will have to be used to store this state.
+Memory (48 bytes) will have to be used to store this i386 state.
 This memory can be allocated from the stack, but perhaps static allocation at the start of the 0x100 area can offer better optimization opportunities.
 
 When using the stack the most strait-forward way to update values would be:
