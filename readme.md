@@ -24,7 +24,7 @@ I think this can have very cool application in modern, small, low-cost, embedded
 
 # How?
 
-```batch
+```cs
 cd %~dp0
 :: appearently clang needs visual studio headers to compile on windows, 
 :: which doesn't make much sense to me, but it works.
