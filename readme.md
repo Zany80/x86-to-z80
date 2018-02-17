@@ -6,7 +6,7 @@ The process works by using the clang (LLVM 3.9.1) compiler to convert C++ to x86
 The project is forked from lefticus/x86-to-6502 and I intend to keep to support for the 6502, so even though I named the project x86-to-z80, it could be x86-to-MultipleCPUs later (or preferably a better name).
 
 Discuss or follow on twitter, if you like:
-https://twitter.com/janwilmans
+<https://twitter.com/janwilmans>
 
 # References
 
