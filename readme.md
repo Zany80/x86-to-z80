@@ -38,7 +38,7 @@ C:\project\LLVM\bin\clang++.exe %1 -O3 -S
 
 # Example
 
-```+cpp
+```cpp
 struct Z80
 {
   volatile uint8_t& memory(const uint16_t address)
@@ -61,7 +61,7 @@ int main()
 ```
 
 Is re-assembled as:
-```+assembly
+```assembly
         ld a,16       ; movb    $16, 40960
         ld (40960),a  ; movb    $16, 40960
         xor a         ; xorl    %eax, %eax
