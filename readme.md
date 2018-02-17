@@ -10,11 +10,11 @@ Discuss or follow on twitter, if you like:
 
 # References
 
-- http://releases.llvm.org/download.html
-- http://www.nowind.nl
+- <http://releases.llvm.org/download.html>
+- <http://www.nowind.nl>
 - using Visual Studio 2017 RC1 with clang-support
-- https://www.visualstudio.com/vs/visual-studio-2017-rc/
-- http://www.myquest.nl/z80undocumented/z80-documented-v0.91.pdf
+- <https://www.visualstudio.com/vs/visual-studio-2017-rc/>
+- <http://www.myquest.nl/z80undocumented/z80-documented-v0.91.pdf>
 
 # Why?
 
