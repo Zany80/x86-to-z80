@@ -24,7 +24,7 @@ I think this can have very cool application in modern, small, low-cost, embedded
 
 # How?
 
-```batch
+```code
 cd %~dp0
 :: appearently clang needs visual studio headers to compile on windows, 
 :: which doesn't make much sense to me, but it works.
@@ -74,7 +74,7 @@ I'm currently exploring different options. Some thoughts:
 
 - is i386 to z80 assembly an relatively easy conversion? or is, let's say a MIPS to z80 conversion easier (suggested since MIPS CPUs have fewer registers and _appearently_ no flag-registers which sounds like a plus for translation). However, that could also mean that the code would get optimized for memory-access operations instead of using registers. 
 - Going further along those lines, would it not be better to just have an LLVM backend for the z80 ? That way the code gets optimized of the amount of registers that the z80 actually HAS :)
-- I'm currently reading up on how a LLVM backend is constructed at http://jonathan2251.github.io/lbd/llvmstructure.html
+- I'm currently reading up on how a LLVM backend is constructed at <http://jonathan2251.github.io/lbd/llvmstructure.html>
 
 My conclusion so far: the i386 to z80 path seems viable and both assembly languages are somewhat familiar to me, so instead of learning how to code backends or learning a new assembly language first, I will continue on this path for now.
 
@@ -149,7 +149,7 @@ LD   C,9    ; command '9' is 'output string to console' / sortof like std::cout
 CALL 0x5    ; call BDOS (a fixed hook address to invoke a bios-function)
 ```
 
-One option is to create the method in assembly and link to it, hard-coding it against the x86 ABI (https://en.wikipedia.org/wiki/X86_calling_conventions).
+One option is to create the method in assembly and link to it, hard-coding it against the x86 ABI (<https://en.wikipedia.org/wiki/X86_calling_conventions>).
 
 Second option is also awkward, but somewhat cleaner (maybe):
 
