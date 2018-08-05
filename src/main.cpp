@@ -35,7 +35,7 @@ void log(LogLevel ll, const std::string& message) {
 }
 
 int processInput(std::istream& is, Target target) {
-	std::regex Comment(R"(\s*\#.*)");
+	std::regex Comment(R"(\s*\#(.*))");
 	std::regex Label(R"(^(\S+):.*)");
 	std::regex Directive(R"(^\t(\..+))");
 	std::regex UnaryInstruction(R"(^\t(\S+)\s+(\S+))");
@@ -56,7 +56,7 @@ int processInput(std::istream& is, Target target) {
 				instructions.emplace_back(lineno, line, ASMLine::Type::Label, match[1]);
 			}
 			else if (std::regex_match(line, match, Comment)) {
-				// don't care about comments
+				instructions.emplace_back(lineno, line, ASMLine::Type::Comment, "; " + std::string(match[1]));
 			}
 			else if (std::regex_match(line, match, Directive)) {
 				instructions.emplace_back(lineno, line, ASMLine::Type::Directive, match[1]);
@@ -84,31 +84,60 @@ int processInput(std::istream& is, Target target) {
 		++lineno;
 	}
 
+	std::set<std::string> needed_objects, labels;
+
 	for (auto &i : instructions) {
 		if (i.type == ASMLine::Type::Label) {
-			i.text = i.text + ":";
+			labels.emplace(i.text);
 		}
 	}
-
+	
+	for (const auto &i : instructions) {
+		if (i.type == ASMLine::Type::Directive) {
+			std::smatch match;
+			if (std::regex_match(i.text, match, std::regex(R"(\.type\s(.*),(.*))"))) {
+				needed_objects.emplace(match[1]);
+			}
+		}
+		if (i.type == ASMLine::Type::Instruction) {
+			if (labels.count(i.operand1.value)) {
+				needed_objects.emplace(i.operand1.value);
+			}
+			if (labels.count(i.operand2.value)) {
+				needed_objects.emplace(i.operand2.value);
+			}
+		}
+	}
+	
 	instructions.erase(
 		std::remove_if(std::begin(instructions), std::end(instructions),
-				[](const auto& i) {
+				[&needed_objects](const auto& i) {
 					if (i.type == ASMLine::Type::Label) {
-						return i.text[0] == '.';
+						return needed_objects.count(i.text) == 0;
 					}
 					return false;
 				}),
 		std::end(instructions));
 	
+	for (auto &i : instructions) {
+		if (i.type == ASMLine::Type::Label) {
+			i.text = i.text + ":";
+			std::size_t pos;
+			while ((pos = i.text.find(".")) != std::string::npos) {
+				i.text.replace(pos, 1, "period_");
+			}
+		}
+	}
+	
 	if (target == Target::Z80) {
 		
-		std::vector<z80> new_instructions;
-
+		std::vector<z80> translated_instructions;
+		
 		for (const auto& i : instructions) {
-			to_z80(i, new_instructions);
+			to_z80(i, translated_instructions);
 		}
 		
-		for (const auto i : new_instructions) {
+		for (const auto i : translated_instructions) {
 			std::cout << i.to_string() << '\n';
 		}
 		

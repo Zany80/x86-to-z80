@@ -8,11 +8,20 @@
 struct z80 : ASMLine {
 	enum class OpCode {
 		unknown,
+		halt,
 		ret,
 		_xor,
 		ld,
+		jp,
 		call,
-		ex
+		ex,
+		dec,
+		inc,
+		add,
+		sub,
+		cp,
+		push,
+		pop,
 	};
 
 	z80(const Type t, std::string s)
@@ -31,6 +40,24 @@ struct z80 : ASMLine {
 				return "ret";
 			case OpCode::ex:
 				return "ex";
+			case OpCode::jp:
+				return "jp";
+			case OpCode::halt:
+				return "halt";
+			case OpCode::dec:
+				return "dec";
+			case OpCode::inc:
+				return "inc";
+			case OpCode::cp:
+				return "cp";
+			case OpCode::add:
+				return "add";
+			case OpCode::sub:
+				return "sub";
+			case OpCode::push:
+				return "push";
+			case OpCode::pop:
+				return "pop";
 			default:
 				return "unknown";
 		}
@@ -53,6 +80,7 @@ struct z80 : ASMLine {
 	std::string to_string() const {
 		switch (type) {
 			case ASMLine::Type::Label:
+			case ASMLine::Type::Comment:
 				return text; // + ':';
 			case ASMLine::Type::Directive:
 			case ASMLine::Type::Instruction:
@@ -82,3 +110,22 @@ struct z80 : ASMLine {
 struct i386;
 
 void to_z80(const i386& i, std::vector<z80>& instructions);
+
+Operand literal(int i);
+Operand literal(std::string s);
+
+typedef struct {
+	Operand a = literal("a");
+	Operand b = literal("b");
+	Operand iyl = literal("iyl");
+	Operand iyh = literal("iyh");
+	Operand iy = literal("iy");
+	Operand ixl = literal("ixl");
+	Operand ixh = literal("ixh");
+	Operand ix = literal("ix");
+	Operand sp = literal("sp");
+	Operand bc = literal("bc");
+	Operand de = literal("de");
+	Operand hl = literal("hl");
+} _registers;
+extern _registers registers;

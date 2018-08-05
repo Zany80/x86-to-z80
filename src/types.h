@@ -16,7 +16,8 @@ struct ASMLine {
 	enum class Type {
 		Label,
 		Instruction,
-		Directive
+		Directive,
+		Comment
 	};
 
 	ASMLine(Type t, std::string te)

@@ -5,6 +5,7 @@
 struct i386 : ASMLine {
 	enum class OpCode {
 		unknown,
+		hlt,
 		movzbl,
 		movzwl,
 		shrb,
@@ -17,6 +18,7 @@ struct i386 : ASMLine {
 		movb,
 		cmpb,
 		movl,
+		movw,
 		jmp,
 		jne,
 		je,
@@ -35,17 +37,19 @@ struct i386 : ASMLine {
 		orb,
 		rep,
 		pushl,
+		popl,
 		sbbb,
 		negb,
 		notb,
 		retl,
-		calll
+		calll,
+		callw
 	};
 	
 	static OpCode parse_opcode(Type t, const std::string& o) {
 		switch (t) {
 			case Type::Label:
-				return OpCode::unknown;
+			case Type::Comment:
 			case Type::Directive:
 				return OpCode::unknown;
 			case Type::Instruction: {
@@ -115,10 +119,18 @@ struct i386 : ASMLine {
 					return OpCode::sbbb;
 				if (o == "pushl")
 					return OpCode::pushl;
+				if (o == "popl")
+					return OpCode::popl;
 				if (o == "retl")
 					return OpCode::retl;
+				if (o == "callw")
+					return OpCode::callw;
 				if (o == "calll")
 					return OpCode::calll;
+				if (o == "movw")
+					return OpCode::movw;
+				if (o == "hlt")
+					return OpCode::hlt;
 			}
 		}
 		throw std::runtime_error("Unknown opcode: " + o);
@@ -160,7 +172,7 @@ struct i386 : ASMLine {
 			else if (o == "%dil") {
 				return Operand(Operand::Type::reg, 0x0A);
 			}
-			else if (o == "%ax" || o == "%eax") {
+			else if (o == "%eax") {
 				return Operand(Operand::Type::reg, 0x10);
 			}
 			else if (o == "%bx" || o == "%ebx") {
@@ -180,6 +192,9 @@ struct i386 : ASMLine {
 			}
 			else if (o == "%esp") {
 				return Operand(Operand::Type::reg, 0x16);
+			}
+			else if (o == "%ax") {
+				return Operand(Operand::Type::reg, 0x17);
 			}
 			else {
 				throw std::runtime_error("Unknown register operand: '" + o + "'");
